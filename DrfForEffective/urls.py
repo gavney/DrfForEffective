@@ -17,5 +17,9 @@ urlpatterns = [
         HomeView.as_view(),
         name='home'
     ),
+    path(
+        'api/rbac/',
+        include('permissions.urls')
+    ),
 ]
 
