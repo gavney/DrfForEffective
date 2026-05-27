@@ -8,70 +8,76 @@ class HomeView(APIView):
 
         return Response(
             {
-                'project': 'DRF for Effective Development by @etogavrusha',
+                "project": "DRF for Effective Development by @etogavrusha",
 
-                'description': (
-                    'Backend application with custom JWT authentication '
-                    'and RBAC authorization system.'
+                "stack": [
+                    "Python",
+                    "Django",
+                    "Django REST Framework",
+                    "PostgreSQL"
+                ],
+
+                "description": (
+                    "Backend application with custom JWT authentication "
+                    "and RBAC authorization system"
                 ),
 
-                'modules': {
-
-                    'authentication': {
-
-                        'register': '/api/auth/register/',
-                        'login': '/api/auth/login/',
-                        'logout': '/api/auth/logout/',
-                    },
-
-                    'users': {
-
-                        'update_profile': '/api/users/me/update/',
-                        'delete_account': '/api/users/me/delete/',
-                    },
-
-                    'business': {
-
-                        'products': '/api/business/products/',
-                        'create_product': '/api/business/products/create/',
-
-                        'orders': '/api/business/orders/',
-                        'create_order': '/api/business/orders/create/',
-
-                        'reports': '/api/business/reports/',
-                    },
-
-                    'rbac': {
-
-                        'resources': '/api/rbac/resources/',
-                        'actions': '/api/rbac/actions/',
-                        'permissions': '/api/rbac/permissions/',
-                        'roles': '/api/rbac/roles/',
-                        'user_roles': '/api/rbac/user-roles/',
-                    }
+                "authentication": {
+                    "type": "JWT",
+                    "header": "Authorization: Bearer <token>",
+                    "flow": "register -> login -> access protected endpoints"
                 },
 
-                'authorization': {
+                "modules": {
+                    "auth": [
+                        "/api/auth/register/",
+                        "/api/auth/login/",
+                        "/api/auth/logout/"
+                    ],
 
-                    'type': 'RBAC',
+                    "users": [
+                        "/api/users/me/update/",
+                        "/api/users/me/delete/"
+                    ],
 
-                    'permission_format': 'resource:action',
+                    "business": [
+                        "/api/business/products/",
+                        "/api/business/products/create/",
+                        "/api/business/orders/",
+                        "/api/business/orders/create/",
+                        "/api/business/reports/"
+                    ],
 
-                    'examples': [
-
-                        'products:read',
-                        'products:create',
-                        'orders:create',
-                        'reports:read',
-                        'rbac:manage',
+                    "rbac": [
+                        "/api/rbac/resources/",
+                        "/api/rbac/actions/",
+                        "/api/rbac/permissions/",
+                        "/api/rbac/roles/",
+                        "/api/rbac/user-roles/"
                     ]
                 },
 
-                'authentication': {
+                "rbac_model": "User → UserRole → Role → Permission → Resource + Action",
 
-                    'type': 'JWT',
+                "permission_format": "resource:action",
 
-                    'header': 'Authorization: Bearer <token>',
+                "examples": [
+                    "products:read",
+                    "products:create",
+                    "orders:create",
+                    "reports:read",
+                    "rbac:manage"
+                ],
+
+                "roles": {
+                    "admin": "full access",
+                    "manager": "products/orders/reports limited access",
+                    "user": "basic access (read products, create orders)"
+                },
+
+                "errors": {
+                    "401": "unauthorized (no/invalid/expired token or inactive user)",
+                    "403": "forbidden (no permission for resource)"
                 }
             }
         )

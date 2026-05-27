@@ -6,6 +6,8 @@ from rest_framework import status
 
 from .serializer import RegistrationSerializer, LoginSerializer
 
+from rest_framework.permissions import IsAuthenticated
+
 from .utils import generate_jwt_token
 
 
@@ -16,7 +18,12 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(
+                {
+                    "message": "User created successfully"
+                },
+                status=status.HTTP_201_CREATED
+            )
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -29,6 +36,24 @@ class LoginView(APIView):
 
             token = generate_jwt_token(user)
 
-            return Response({'token': token}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "access_token": token
+                },
+                status=status.HTTP_200_OK
+            )
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LogoutView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        return Response(
+            {
+                'message': 'Logged out successfully'
+            }
+        )

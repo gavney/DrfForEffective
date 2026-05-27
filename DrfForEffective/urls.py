@@ -21,5 +21,9 @@ urlpatterns = [
         'api/rbac/',
         include('permissions.urls')
     ),
+    path(
+        'api/users/',
+        include('users.urls')
+    ),
 ]
 
